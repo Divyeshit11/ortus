@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useState } from 'react';
+import { useSession, signOut } from 'next-auth/react';
 
 const links = [
   { href: '/', label: 'Home' },
@@ -14,6 +15,7 @@ const links = [
 export default function Header() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
+  const { data: session, status } = useSession();
 
   return (
     <header className="sticky top-0 z-50 border-b border-brand-border bg-white/95 backdrop-blur-md">
@@ -46,7 +48,36 @@ export default function Header() {
           >
             SHOP NOW
           </Link>
-          
+
+          {status === 'loading' ? (
+            <div className="hidden md:block text-sm text-brand-muted">Loading...</div>
+          ) : session ? (
+            <div className="hidden md:flex items-center gap-3">
+              <span className="text-sm text-brand-muted">Hi, {session.user?.name || 'User'}</span>
+              <button
+                onClick={() => signOut()}
+                className="text-sm text-brand-text hover:text-brand-accent transition-colors"
+              >
+                Sign out
+              </button>
+            </div>
+          ) : (
+            <div className="hidden md:flex items-center gap-3">
+              <Link
+                href="/login"
+                className="text-sm text-brand-text hover:text-brand-accent transition-colors"
+              >
+                Sign in
+              </Link>
+              <Link
+                href="/signup"
+                className="text-sm bg-brand-text text-white px-4 py-2 rounded hover:bg-brand-accent transition-colors"
+              >
+                Sign up
+              </Link>
+            </div>
+          )}
+
           <Link
             href="/cart"
             aria-label="Cart"
@@ -97,6 +128,41 @@ export default function Header() {
           >
             SHOP NOW
           </Link>
+          <div className="border-t border-brand-border pt-4 mt-2">
+            {status === 'loading' ? (
+              <div className="text-sm text-brand-muted text-center">Loading...</div>
+            ) : session ? (
+              <div className="flex flex-col gap-3">
+                <span className="text-sm text-brand-muted text-center">Hi, {session.user?.name || 'User'}</span>
+                <button
+                  onClick={() => {
+                    signOut();
+                    setOpen(false);
+                  }}
+                  className="text-sm text-brand-text hover:text-brand-accent transition-colors text-center"
+                >
+                  Sign out
+                </button>
+              </div>
+            ) : (
+              <div className="flex flex-col gap-3">
+                <Link
+                  href="/login"
+                  onClick={() => setOpen(false)}
+                  className="text-sm text-brand-text hover:text-brand-accent transition-colors text-center"
+                >
+                  Sign in
+                </Link>
+                <Link
+                  href="/signup"
+                  onClick={() => setOpen(false)}
+                  className="text-sm bg-brand-text text-white px-4 py-2 rounded hover:bg-brand-accent transition-colors text-center"
+                >
+                  Sign up
+                </Link>
+              </div>
+            )}
+          </div>
         </nav>
       )}
     </header>

@@ -3,6 +3,7 @@ import { Playfair_Display, Inter } from 'next/font/google';
 import AnnouncementBar from '@/components/announcement-bar';
 import Footer from '@/components/footer';
 import Header from '@/components/header';
+import { Providers } from '@/components/providers';
 import './globals.css';
 
 const playfair = Playfair_Display({
@@ -33,10 +34,12 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${playfair.variable} ${inter.variable}`}>
       <body className="min-h-screen flex flex-col font-sans">
-        <AnnouncementBar />
-        <Header />
-        <main className="flex-1">{children}</main>
-        <Footer />
+        <Providers>
+          <AnnouncementBar />
+          <Header />
+          <main className="flex-1">{children}</main>
+          <Footer />
+        </Providers>
       </body>
     </html>
   );
