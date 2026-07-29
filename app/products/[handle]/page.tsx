@@ -1,15 +1,17 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { getProductByHandleSafe } from '@/lib/shopify';
+import { getProductByHandle } from '@/lib/shopify';
 import ProductGallery from './product-gallery';
 import ProductPurchase from './product-purchase';
+
+export const dynamic = 'force-dynamic';
 
 export default async function ProductPage({
   params,
 }: {
   params: { handle: string };
 }) {
-  const product = await getProductByHandleSafe(params.handle);
+  const product = await getProductByHandle(params.handle);
   if (!product) return notFound();
 
   const images = product.images.edges.map((e: any) => e.node);

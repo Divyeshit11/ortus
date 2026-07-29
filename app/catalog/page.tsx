@@ -1,8 +1,10 @@
-import { getAllProductsSafe } from '@/lib/shopify';
+import { getAllProducts } from '@/lib/shopify';
 import ProductGrid from '@/components/product-grid';
 
+export const dynamic = 'force-dynamic';
+
 export default async function CatalogPage() {
-  const products = await getAllProductsSafe();
+  const products = await getAllProducts();
 
   return (
     <div className="max-w-7xl mx-auto px-5 md:px-8 py-12 md:py-20">

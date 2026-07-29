@@ -1,9 +1,11 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import { getAllProductsSafe } from '@/lib/shopify';
+import { getAllProducts } from '@/lib/shopify';
+
+export const dynamic = 'force-dynamic';
 
 export default async function HomePage() {
-  const products = await getAllProductsSafe();
+  const products = await getAllProducts();
 
   return (
     <div>
