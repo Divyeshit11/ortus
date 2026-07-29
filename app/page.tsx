@@ -5,10 +5,27 @@ import { getAllProducts } from '@/lib/shopify';
 export const dynamic = 'force-dynamic';
 
 export default async function HomePage() {
-  const products = await getAllProducts();
+  let products: any[] = [];
+  let error: string | null = null;
+
+  try {
+    products = await getAllProducts();
+  } catch (e) {
+    error = e instanceof Error ? e.message : 'Failed to fetch products';
+    console.error('Error fetching products:', error);
+  }
 
   return (
     <div>
+      {/* Error Display */}
+      {error && (
+        <div className="bg-red-50 border border-red-200 text-red-800 px-4 py-3 m-4 rounded">
+          <p className="font-semibold">Error loading products:</p>
+          <p className="text-sm">{error}</p>
+          <p className="text-xs mt-2">Please check your Shopify API credentials in Vercel environment variables.</p>
+        </div>
+      )}
+
       {/* Hero */}
       <section className="bg-brand-accent-light text-center py-32 px-6">
         <h1 className="font-serif text-4xl md:text-6xl lg:text-7xl text-brand-text mb-6 tracking-tight">
