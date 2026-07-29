@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { getProductByHandle } from '@/lib/shopify';
+import { getProductByHandleSafe } from '@/lib/shopify';
 import ProductGallery from './product-gallery';
 import ProductPurchase from './product-purchase';
 
@@ -9,11 +9,11 @@ export default async function ProductPage({
 }: {
   params: { handle: string };
 }) {
-  const product = await getProductByHandle(params.handle);
+  const product = await getProductByHandleSafe(params.handle);
   if (!product) return notFound();
 
-  const images = product.images.edges.map((e) => e.node);
-  const variants = product.variants.edges.map((e) => e.node);
+  const images = product.images.edges.map((e: any) => e.node);
+  const variants = product.variants.edges.map((e: any) => e.node);
 
   return (
     <div className="max-w-7xl mx-auto px-5 md:px-8 py-12 md:py-20">

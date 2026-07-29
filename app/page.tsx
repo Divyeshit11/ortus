@@ -1,9 +1,9 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import { getAllProducts } from '@/lib/shopify';
+import { getAllProductsSafe } from '@/lib/shopify';
 
 export default async function HomePage() {
-  const products = await getAllProducts();
+  const products = await getAllProductsSafe();
 
   return (
     <div>
@@ -56,7 +56,7 @@ export default async function HomePage() {
           </p>
         </div>
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-          {products.map((product) => {
+          {products.map((product: any) => {
             const image = product.images.edges[0]?.node;
             const price = product.priceRange.minVariantPrice;
             return (

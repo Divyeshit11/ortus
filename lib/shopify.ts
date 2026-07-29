@@ -69,6 +69,25 @@ async function shopifyFetch<T>({
   return json.data as T;
 }
 
+// Graceful fallback for build-time failures
+export async function getAllProductsSafe(): Promise<ShopifyProduct[]> {
+  try {
+    return await getAllProducts();
+  } catch (error) {
+    console.warn('Failed to fetch products during build:', error);
+    return [];
+  }
+}
+
+export async function getProductByHandleSafe(handle: string): Promise<ShopifyProduct | null> {
+  try {
+    return await getProductByHandle(handle);
+  } catch (error) {
+    console.warn('Failed to fetch product during build:', error);
+    return null;
+  }
+}
+
 // ---- Types ----
 export type ShopifyImage = {
   url: string;
